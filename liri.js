@@ -2,12 +2,14 @@ require("dotenv").config();
 
 var keys = require("./keys.js");
 
-// var spotify = new Spotify(keys.spotify);
 
 var moment = require('moment');
 
 // Grab the axios package...
 var axios = require("axios");
+
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
 
 var nodeArgs = process.argv;
 
@@ -35,6 +37,17 @@ for (var i = 3; i < nodeArgs.length; i++) {
         movie = movie + "+" + nodeArgs[i];
     } else {
         movie += nodeArgs[i];
+
+    }
+}
+
+var song = ""
+for (var i = 3; i < nodeArgs.length; i++) {
+
+    if (i > 3 && i < nodeArgs.length) {
+        song = song + "+" + nodeArgs[i];
+    } else {
+        song += nodeArgs[i];
 
     }
 }
@@ -113,4 +126,16 @@ if (nodeArgs[2] === "concert-this") {
             }
             console.log(error.config);
         });
-};
+} else if (nodeArgs[2] === "spotify-this-song") {
+    spotify.request('https://api.spotify.com/v1/search?q=track:' + song + '&type=track&limit=10', function (error, songResponse) {
+        if (error) {
+            return console.log(error);
+        }
+        // console.log(songResponse.tracks.items[0]);
+        console.log("Artist: " + songResponse.tracks.items[0].artists[0].name);
+        console.log("Song: " + songResponse.tracks.items[0].name);
+        console.log("URL: " + songResponse.tracks.items[0].preview_url);
+        console.log("Album: " + songResponse.tracks.items[0].album.name);
+    });
+
+}
