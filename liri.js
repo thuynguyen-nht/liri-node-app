@@ -14,11 +14,11 @@ var spotify = new Spotify(keys.spotify);
 
 var fs = require("fs")
 
-var nodeArgs = process.argv;
-
 var arg1 = process.argv[2];
 
 var arg2 = process.argv.slice(3).join(" ");
+
+var nodeArgs = arg1 + "," + arg2;
 
 //=============Switch statment======
 
@@ -66,14 +66,36 @@ function getArtistInfo(artist) {
             // Then log the body from the site!
             // console.log(response.data);
             var artistResults = response.data;
+            var output = [];
+
+            var divider = "\n------------------------------------------------------------\n";
 
             for (var i in artistResults) {
-
-                console.log("Venue Name: " + response.data[i].venue.name);
-                console.log("Venue Location: " + response.data[i].venue.city);
-                console.log("Date: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
-                console.log("===================");
+                output.push({
+                    "Venue Name: ": response.data[i].venue.name,
+                    "Venue Location: ": response.data[i].venue.city,
+                    "Date: ": moment(response.data[i].datetime).format("MM/DD/YYYY"),
+                })
+                // console.log("Venue Name: " + response.data[i].venue.name);
+                // console.log("Venue Location: " + response.data[i].venue.city);
+                // console.log("Date: " + moment(response.data[i].datetime).format("MM/DD/YYYY"));
+                // console.log("===================");
             }
+
+            console.log(output)
+            fs.appendFile("log.txt", '\n' + JSON.stringify(output) + divider, {
+                flag: 'a+'
+            }, function (err) {
+
+                // If the code experiences any errors it will log the error to the console.
+                if (err) {
+                    return console.log(err);
+                }
+
+                // Otherwise, it will print: "movies.txt was updated!"
+                console.log("log.txt was updated!");
+
+            });
         })
         .catch(function (error) {
             if (error.response) {
@@ -106,16 +128,34 @@ function getMovieInfo(movie) {
             // If the axios was successful...
             // Then log the body from the site!
             // console.log(response.data);
-            console.log("===================");
-            console.log("Title: " + response.data.Title);
-            console.log("Release Year: " + response.data.Year);
-            console.log("IMDB Rating: " + response.data.imdbRating);
-            console.log("Rotten Tomatoes: " + response.data.Ratings[0].Value);
-            console.log("Country: " + response.data.Country);
-            console.log("Language: " + response.data.Language);
-            console.log("Plot: " + response.data.Plot);
-            console.log("Actors: " + response.data.Actors);
-            console.log("===================");
+
+            var output = [
+                "------------------------",
+                "Title: " + response.data.Title,
+                "Release Year: " + response.data.Year,
+                "IMDB Rating: " + response.data.imdbRating,
+                "Rotten Tomatoes: " + response.data.Ratings[0].Value,
+                "Country: " + response.data.Country,
+                "Language: " + response.data.Language,
+                "Plot: " + response.data.Plot,
+                "Actors: " + response.data.Actors,
+                "------------------------",
+            ].join("\n")
+
+
+            fs.appendFile("log.txt", output, {
+                flag: 'a+'
+            }, function (err) {
+
+                // If the code experiences any errors it will log the error to the console.
+                if (err) {
+                    return console.log(err);
+                }
+
+                // Otherwise, it will print: "movies.txt was updated!"
+                console.log("log.txt was updated!");
+                console.log(output)
+            });
 
         })
         .catch(function (error) {
@@ -148,14 +188,35 @@ function getSongInfo(song) {
         }
         // console.log(songResponse.tracks.items[0]);
         var songResponses = songResponse.tracks.items;
+        var output = [];
+
+        var divider = "\n------------------------------------------------------------\n";
 
         for (var i in songResponses) {
-            console.log("Artist: " + songResponses[i].artists[0].name);
-            console.log("Song: " + songResponses[i].name);
-            console.log("URL: " + songResponses[i].preview_url);
-            console.log("Album: " + songResponses[i].album.name);
-            console.log('===============');
+            output.push({
+                "Artist: ": songResponses[i].artists[0].name,
+                "Song: ": songResponses[i].name,
+                "URL: ": songResponses[i].preview_url,
+                "Album: ": songResponses[i].album.name,
+
+            })
+
         }
+
+        console.log(output)
+        fs.appendFile("log.txt", '\n' + JSON.stringify(output) + divider, {
+            flag: 'a+'
+        }, function (err) {
+
+            // If the code experiences any errors it will log the error to the console.
+            if (err) {
+                return console.log(err);
+            }
+
+            // Otherwise, it will print: "movies.txt was updated!"
+            console.log("log.txt was updated!");
+
+        });
 
     });
 }
@@ -175,24 +236,14 @@ function doWhatItSays() {
         // We will then re-display the content as an array for later use.
         console.log(dataArr);
 
-        // switch (dataArr[0]) {
-        //     case "concert-this":
-        //         getArtistInfo(dataArr[1]);
-        //         break;
-        //     case "movie-this":
-        //         getMovieInfo(dataArr[1]);
-        //         break;
-        //     case "spotify-this-song":
-        //         getSongInfo(dataArr[1]);
-        //         break;
-        //     case "do-what-it-says":
-        //         doWhatItSays();
-        //         break;
-        //     default:
-        //         console.log('Humm! I do not know that. Let try again.');
-        // }
-
-
-
+        if (dataArr[0] === "concert-this") {
+            getArtistInfo(dataArr[1])
+        } else if (dataArr[0] === "spotify-this-song") {
+            getSongInfo(dataArr[1])
+        } else if (dataArr[0] === "movie-this") {
+            getMovieInfo(dataArr[1])
+        } else {
+            doWhatItSays()
+        }
     });
 }
