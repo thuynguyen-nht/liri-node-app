@@ -16,9 +16,9 @@ var fs = require("fs")
 
 var nodeArgs = process.argv;
 
-// var command = process.argv[2];
+var arg1 = process.argv[2];
 
-// var arg2 = process.argv.slice(3).join(" ");
+var arg2 = process.argv.slice(3).join(" ");
 
 //=============Switch statment======
 
@@ -51,24 +51,12 @@ function runCommand(userCommand, userSearch) {
 }
 
 //call out runCommand
-runCommand(process.argv[2], process.argv[3])
+runCommand(arg1, arg2)
 
 //=======functions===============
 function getArtistInfo(artist) {
-
-    //Crete an empty variable for holding the artist name
-    var artist = "";
-
-    // Loop through all the words in the node argument
-    // And do a little for-loop magic to handle the inclusion of "+"s
-    for (var i = 3; i < nodeArgs.length; i++) {
-
-        if (i > 3 && i < nodeArgs.length) {
-            artist = artist + "%20" + nodeArgs[i];
-        } else {
-            artist += nodeArgs[i];
-
-        }
+    if (!artist) {
+        artist = 'Lady Gaga'
     }
 
     axios
@@ -108,18 +96,10 @@ function getArtistInfo(artist) {
 
 function getMovieInfo(movie) {
 
-    var movie = "";
-    // Loop through all the words in the node argument
-    // And do a little for-loop magic to handle the inclusion of "+"s
-    for (var i = 3; i < nodeArgs.length; i++) {
-
-        if (i > 3 && i < nodeArgs.length) {
-            movie = movie + "+" + nodeArgs[i];
-        } else {
-            movie += nodeArgs[i];
-
-        }
+    if (!movie) {
+        movie = 'Matrix'
     }
+
     axios
         .get("http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy")
         .then(function (response) {
@@ -159,15 +139,8 @@ function getMovieInfo(movie) {
 
 function getSongInfo(song) {
 
-    var song = ""
-    for (var i = 3; i < nodeArgs.length; i++) {
-
-        if (i > 3 && i < nodeArgs.length) {
-            song = song + "+" + nodeArgs[i];
-        } else {
-            song += nodeArgs[i];
-
-        }
+    if (!song) {
+        song = 'The Sign'
     }
     spotify.request('https://api.spotify.com/v1/search?q=track:' + song + '&type=track&limit=10', function (error, songResponse) {
         if (error) {
@@ -202,22 +175,22 @@ function doWhatItSays() {
         // We will then re-display the content as an array for later use.
         console.log(dataArr);
 
-        switch (dataArr[0]) {
-            case "concert-this":
-                getArtistInfo(dataArr[1]);
-                break;
-            case "movie-this":
-                getMovieInfo(dataArr[1]);
-                break;
-            case "spotify-this-song":
-                getSongInfo(dataArr[1]);
-                break;
-            case "do-what-it-says":
-                doWhatItSays();
-                break;
-            default:
-                console.log('Humm! I do not know that. Let try again.');
-        }
+        // switch (dataArr[0]) {
+        //     case "concert-this":
+        //         getArtistInfo(dataArr[1]);
+        //         break;
+        //     case "movie-this":
+        //         getMovieInfo(dataArr[1]);
+        //         break;
+        //     case "spotify-this-song":
+        //         getSongInfo(dataArr[1]);
+        //         break;
+        //     case "do-what-it-says":
+        //         doWhatItSays();
+        //         break;
+        //     default:
+        //         console.log('Humm! I do not know that. Let try again.');
+        // }
 
 
 
