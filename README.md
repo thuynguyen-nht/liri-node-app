@@ -55,5 +55,5 @@ The structure is divided into 3 main parts:
 [Demo Video](https://youtu.be/xv6gHpz46CU)
 
 ### Contact me 
-[Github]: (https://github.com/thuynguyen-nht)
-[Email]: (thuynguyen.nht20@gmail.com)
+Github: (https://github.com/thuynguyen-nht)
+Email: thuynguyen.nht20@gmail.com
