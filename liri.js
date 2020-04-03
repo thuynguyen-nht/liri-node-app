@@ -18,7 +18,6 @@ var arg1 = process.argv[2];
 
 var arg2 = process.argv.slice(3).join(" ");
 
-var nodeArgs = arg1 + "," + arg2;
 
 //=============Switch statment======
 
