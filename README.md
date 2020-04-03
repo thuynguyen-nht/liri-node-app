@@ -52,7 +52,7 @@ The structure is divided into 3 main parts:
   - doWhatItSays()
 
 ### Demo
-![Demo Video](https://youtu.be/xv6gHpz46CU)
+[Demo Video](https://youtu.be/xv6gHpz46CU)
 
 ### Contact me 
 [Github]: (https://github.com/thuynguyen-nht)
